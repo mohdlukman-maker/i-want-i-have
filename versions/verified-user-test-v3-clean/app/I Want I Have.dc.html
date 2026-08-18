@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-93872015-57fd-4b2f-a64c-84bb24b5c4f4/styles.css">
+<script src="_ds/modernist-93872015-57fd-4b2f-a64c-84bb24b5c4f4/_ds_bundle.js"></script>
+<meta name="design_doc_mode" content="canvas">
+<style>
+  body{margin:0;background:var(--color-neutral-200)}
+  @keyframes iwih-spin{to{transform:rotate(360deg)}}
+  @keyframes iwih-pulse{0%,100%{opacity:.35}50%{opacity:1}}
+  @keyframes iwih-ring{0%{transform:scale(.6);opacity:.7}100%{transform:scale(1.9);opacity:0}}
+  @keyframes iwih-up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .iwih-scroll::-webkit-scrollbar{width:0}
+  .iwih-scroll{scrollbar-width:none}
+  .iwih-tap{cursor:pointer;transition:background .12s,transform .08s,border-color .12s}
+  .iwih-tap:active{transform:scale(.985)}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start;justify-content:center;padding:40px 28px">
+
+  <div style="flex:none;width:390px;height:820px;background:#0b0b0b;border-radius:46px;padding:11px;box-shadow:var(--shadow-lg);position:sticky;top:40px">
+    <div style="position:relative;width:100%;height:100%;background:var(--color-bg);border-radius:35px;overflow:hidden;display:flex;flex-direction:column">
+
+      <div style="height:34px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font:600 13px var(--font-heading);z-index:5;background:var(--color-bg)">
+        <span>9:41</span>
+        <span style="width:120px;height:22px;background:#0b0b0b;border-radius:0 0 14px 14px;position:absolute;left:50%;transform:translateX(-50%);top:0"></span>
+        <span style="display:flex;gap:5px;align-items:center">
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="4" width="3" height="8" rx="1"/><rect x="9" y="1.5" width="3" height="10.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".4"/></svg>
+          <svg width="22" height="12" viewBox="0 0 24 12" fill="none" stroke="currentColor"><rect x="1" y="1.5" width="19" height="9" rx="2.5"/><rect x="2.6" y="3" width="14" height="6" rx="1" fill="currentColor" stroke="none"/><rect x="21" y="4" width="2" height="4" rx="1" fill="currentColor" stroke="none"/></svg>
+        </span>
+      </div>
+
+      <sc-if value="{{ showHeader }}">
+        <div style="flex:none;display:flex;align-items:center;gap:12px;padding:8px 16px;border-bottom:2px solid var(--color-divider);background:var(--color-bg);min-height:50px">
+          <sc-if value="{{ backTo }}">
+            <button class="btn btn-icon iwih-tap" aria-label="Back" onClick="{{ goBack }}" style="border:1px solid var(--color-divider);flex:none">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+          </sc-if>
+          <span style="font:800 18px var(--font-heading);letter-spacing:-.015em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ title }}</span>
+          <span class="tag {{ headerTagClass }}" style="flex:none">{{ headerTag }}</span>
+        </div>
+      </sc-if>
+
+      <div ref="{{ scrollRef }}" class="iwih-scroll" style="flex:1;overflow-y:auto;overflow-x:hidden;position:relative">
+
+        <!-- ============ WELCOME ============ -->
+        <sc-if value="{{ is_welcome }}">
+          <div style="min-height:100%;display:flex;flex-direction:column;padding:38px 26px 30px;background:var(--color-accent);color:var(--color-bg)">
+            <div style="font:800 12px var(--font-heading);letter-spacing:.18em;opacity:.85">LOCAL · FAST · NEARBY</div>
+            <div style="height:2px;background:var(--color-bg);opacity:.5;margin:14px 0 auto"></div>
+            <h1 style="font-size:52px;line-height:.94;color:var(--color-bg);margin:0 0 18px">I Want,<br>I Have.</h1>
+            <p style="font-size:16px;opacity:.92;margin:0 0 30px;max-width:15em">Post what you want. Show what you have. Connect with people and shops nearby — in minutes, not days.</p>
+            <button class="btn iwih-tap" onClick="{{ goHome }}" style="width:100%;background:var(--color-bg);color:var(--color-accent);justify-content:space-between;padding:16px 18px;font-size:16px">
+              Get started
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+            <button class="btn iwih-tap" onClick="{{ goHome }}" style="width:100%;color:var(--color-bg);justify-content:center;margin-top:10px;opacity:.85;font-size:13px">I already have an account</button>
+          </div>
+        </sc-if>
+
+        <!-- ============ HOME ============ -->
+        <sc-if value="{{ is_home }}">
+          <div style="padding:20px 18px 26px;display:flex;flex-direction:column;gap:16px;animation:iwih-up .25s">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div>
+                <div style="font:800 22px var(--font-heading);letter-spacing:-.02em">I Want, I Have.</div>
+                <div class="text-muted" style="display:flex;align-items:center;gap:5px;font-size:12px;margin-top:2px">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                  BGC, Taguig · within 5 km
+                </div>
+              </div>
+              <button class="btn btn-icon iwih-tap" aria-label="Notifications" onClick="{{ goNotifs }}" style="border:1px solid var(--color-divider);position:relative">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+                <span style="position:absolute;top:6px;right:7px;width:8px;height:8px;background:var(--color-accent);border-radius:50%;border:1.5px solid var(--color-bg)"></span>
+              </button>
+            </div>
+
+            <p class="text-muted" style="font-size:13px;margin:2px 0 0">What do you need today?</p>
+
+            <button class="iwih-tap" onClick="{{ goWant }}" style="border:none;text-align:left;background:var(--color-accent);color:var(--color-bg);padding:22px 20px;display:flex;align-items:center;gap:16px">
+              <span style="width:52px;height:52px;flex:none;border:2px solid var(--color-bg);display:grid;place-items:center">
+                <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              </span>
+              <span style="flex:1">
+                <span style="display:block;font:800 27px var(--font-heading);line-height:1">I Want</span>
+                <span style="display:block;font-size:13px;opacity:.9;margin-top:3px">Find who nearby has it</span>
+              </span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+
+            <button class="iwih-tap" onClick="{{ goHave }}" style="border:2px solid var(--color-text);text-align:left;background:var(--color-text);color:var(--color-bg);padding:22px 20px;display:flex;align-items:center;gap:16px">
+              <span style="width:52px;height:52px;flex:none;border:2px solid var(--color-bg);display:grid;place-items:center">
+                <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.3 9 5.2v9L7.5 23.7l-9-5.2v-9Z" transform="translate(3.5 -2)"/><path d="M3.3 7.5 12 12.5l8.7-5M12 22.5V12.5"/></svg>
+              </span>
+              <span style="flex:1">
+                <span style="display:block;font:800 27px var(--font-heading);line-height:1">I Have</span>
+                <span style="display:block;font-size:13px;opacity:.85;margin-top:3px">Show items you can provide</span>
+              </span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+
+            <div class="hr" style="margin:8px 0"></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <h6 style="margin:0">Active nearby</h6>
+              <a class="iwih-tap" onClick="{{ goMatches }}" style="font-size:12px;cursor:pointer;color:var(--color-accent)">See all</a>
+            </div>
+            <div class="card iwih-tap" onClick="{{ goActive }}" style="background:var(--color-surface);gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span class="tag tag-accent">● WANT · ACTIVE</span>
+                <span class="text-muted" style="font-size:11px;display:flex;align-items:center;gap:4px">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                  22h left
+                </span>
+              </div>
+              <div class="card-title">Anker PowerCore 20000mAh</div>
+              <div class="card-meta">3 providers responded · nearest 0.8 km</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ============ WANT: METHOD ============ -->
+        <sc-if value="{{ is_want_method }}">
+          <div style="padding:20px 18px 26px;display:flex;flex-direction:column;gap:14px;animation:iwih-up .25s">
+            <span class="tag tag-accent" style="align-self:flex-start">STEP 1 OF 4 · IDENTIFY</span>
+            <h3 style="margin:0">How should we find it?</h3>
+            <p class="text-muted" style="font-size:13px;margin:0 0 2px">Give us anything — we'll fill in the rest.</p>
+
+            <button class="iwih-tap" onClick="{{ goWantCapture }}" style="border:1px solid var(--color-divider);background:var(--color-surface);text-align:left;padding:18px;display:flex;gap:14px;align-items:center">
+              <span style="width:44px;height:44px;flex:none;background:var(--color-accent);color:var(--color-bg);display:grid;place-items:center">
+                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>
+              </span>
+              <span style="flex:1"><span style="display:block;font:800 16px var(--font-heading)">Photo</span><span class="text-muted" style="font-size:12px">Snap it or upload an image</span></span>
+              <span class="tag tag-outline">Fastest</span>
+            </button>
+
+            <button class="iwih-tap" onClick="{{ goWantCapture }}" style="border:1px solid var(--color-divider);background:var(--color-surface);text-align:left;padding:18px;display:flex;gap:14px;align-items:center">
+              <span style="width:44px;height:44px;flex:none;border:2px solid var(--color-text);display:grid;place-items:center">
+                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2M9 20h6M12 5v15"/></svg>
+              </span>
+              <span style="flex:1"><span style="display:block;font:800 16px var(--font-heading)">Type it</span><span class="text-muted" style="font-size:12px">Name or short description</span></span>
+            </button>
+
+            <button class="iwih-tap" onClick="{{ goWantCapture }}" style="border:1px solid var(--color-divider);background:var(--color-surface);text-align:left;padding:18px;display:flex;gap:14px;align-items:center">
+              <span style="width:44px;height:44px;flex:none;border:2px solid var(--color-text);display:grid;place-items:center">
+                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+              </span>
+              <span style="flex:1"><span style="display:block;font:800 16px var(--font-heading)">Paste a link</span><span class="text-muted" style="font-size:12px">Shopee, Lazada, Amazon…</span></span>
+            </button>
+          </div>
+        </sc-if>
+
+        <!-- ============ WANT: CAPTURE ============ -->
+        <sc-if value="{{ is_want_capture }}">
+          <div style="display:flex;flex-direction:column;height:100%;background:#0b0b0b;color:#fff">
+            <div style="flex:1;position:relative;display:grid;place-items:center;background:repeating-linear-gradient(135deg,#171717,#171717 22px,#1d1d1d 22px,#1d1d1d 44px)">
+              <div style="position:absolute;inset:34px;border:2px solid rgba(255,255,255,.35)"></div>
+              <div style="position:absolute;top:22px;left:0;right:0;text-align:center;font-size:12px;opacity:.7">Point at the product · keep it in frame</div>
+              <div style="text-align:center;opacity:.5">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>
+              </div>
+            </div>
+            <div style="flex:none;padding:22px 20px 26px;display:flex;align-items:center;justify-content:space-between;background:#0b0b0b">
+              <button class="iwih-tap" onClick="{{ goWantAnalyze }}" style="border:none;background:transparent;color:#fff;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+                Upload
+              </button>
+              <button class="iwih-tap" aria-label="Capture" onClick="{{ goWantAnalyze }}" style="width:72px;height:72px;border-radius:50%;border:4px solid #fff;background:var(--color-accent);cursor:pointer"></button>
+              <div style="width:44px;font-size:11px;opacity:.55;text-align:center">Tap to simulate</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ============ WANT: ANALYZING ============ -->
+        <sc-if value="{{ is_want_analyzing }}">
+          <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:40px 30px;text-align:center">
+            <div style="position:relative;width:120px;height:120px;display:grid;place-items:center">
+              <span style="position:absolute;inset:0;border:2px solid var(--color-accent);border-radius:50%;animation:iwih-ring 1.8s ease-out infinite"></span>
+              <span style="position:absolute;inset:0;border:2px solid var(--color-accent);border-radius:50%;animation:iwih-ring 1.8s ease-out infinite 0.6s"></span>
+              <span style="width:56px;height:56px;border:3px solid var(--color-divider);border-top-color:var(--color-accent);border-radius:50%;animation:iwih-spin .9s linear infinite"></span>
+            </div>
+            <div>
+              <h4 style="margin:0 0 6px">Reading your image…</h4>
+              <p class="text-muted" style="font-size:13px;margin:0">Detecting product, brand and specs</p>
+            </div>
+            <div style="width:100%;max-width:220px;display:flex;flex-direction:column;gap:8px;font-size:12px;text-align:left">
+              <div style="display:flex;gap:8px;align-items:center;color:var(--color-accent)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Image received</div>
+              <div style="display:flex;gap:8px;align-items:center;animation:iwih-pulse 1.2s infinite"><span style="width:15px;height:15px;border:2px solid var(--color-divider);border-top-color:var(--color-accent);border-radius:50%;animation:iwih-spin .8s linear infinite"></span> Matching catalogue</div>
+              <div style="display:flex;gap:8px;align-items:center;opacity:.4"><span style="width:15px;height:15px;border:2px solid var(--color-divider);border-radius:50%"></span> Extracting details</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ============ WANT: REVIEW ============ -->
+        <sc-if value="{{ is_want_review }}">
+          <div style="padding:16px 18px 24px;display:flex;flex-direction:column;gap:14px;animation:iwih-up .25s">
+            <div style="background:var(--color-accent-100);border-left:3px solid var(--color-accent);padding:10px 12px;display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--color-accent-800)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex:none;margin-top:1px" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.2 2.6 17a1.5 1.5 0 0 0 1.3 2.3h16.2A1.5 1.5 0 0 0 21.4 17L14.1 4.2a1.5 1.5 0 0 0-2.6 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+              AI filled this in. Check the highlighted fields before continuing.
+            </div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="grayscale" style="width:76px;height:76px;flex:none;background:repeating-linear-gradient(45deg,var(--color-neutral-300),var(--color-neutral-300) 8px,var(--color-neutral-200) 8px,var(--color-neutral-200) 16px);display:grid;place-items:center;color:var(--color-neutral-600)">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+              </div>
+              <div style="flex:1"><div class="text-muted" style="font-size:11px">Detected image</div><div style="font:800 15px var(--font-heading);line-height:1.2">Power bank · black</div><a class="iwih-tap" style="font-size:12px;color:var(--color-accent);cursor:pointer">Retake photo</a></div>
+            </div>
+
+            <div class="field"><label>Product name</label><input class="input" value="{{ product.name }}" onChange="{{ onName }}"></div>
+            <div style="display:flex;gap:12px">
+              <div class="field" style="flex:1"><label style="display:flex;justify-content:space-between">Brand <span class="tag tag-neutral" style="padding:1px 6px;font-size:9px">AI 94%</span></label><input class="input" value="{{ product.brand }}" onChange="{{ onBrand }}"></div>
+              <div class="field" style="flex:1"><label style="display:flex;justify-content:space-between">Model <span class="tag tag-outline" style="padding:1px 6px;font-size:9px">CHECK 72%</span></label><input class="input" value="{{ product.model }}" onChange="{{ onModel }}" style="border-color:var(--color-accent)"></div>
+            </div>
+            <div style="display:flex;gap:12px">
+              <div class="field" style="flex:1"><label>Category</label><input class="input" value="{{ product.category }}" onChange="{{ onCategory }}"></div>
+              <div class="field" style="flex:1"><label>Colour</label><input class="input" value="{{ product.color }}" onChange="{{ onColor }}"></div>
+            </div>
+            <div class="field"><label>Specifications</label><input class="input" value="{{ product.specs }}" onChange="{{ onSpecs }}"></div>
+            <button class="btn btn-primary btn-block iwih-tap" onClick="{{ goWantDetails }}" style="justify-content:space-between;padding:14px 16px;font-size:15px">Looks right — continue <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+          </div>
+        </sc-if>
+
+        <!-- ============ WANT: DETAILS ============ -->
+        <sc-if value="{{ is_want_details }}">
+          <div style="padding:18px 18px 24px;display:flex;flex-direction:column;gap:18px;animation:iwih-up .25s">
+            <div>
+              <h6 style="margin:0 0 8px">When do you need it?</h6>
+              <div style="display:flex;gap:10px">
+                <button class="iwih-tap {{ nowSel }}" onClick="{{ setNow }}" style="flex:1;text-align:left;padding:14px;border:2px solid {{ nowBorder }};background:{{ nowBg }};color:{{ nowFg }};cursor:pointer">
+                  <span style="display:flex;align-items:center;gap:6px;font:800 15px var(--font-heading)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>Want Now</span>
+                  <span style="display:block;font-size:11px;opacity:.85;margin-top:4px">Active 24h · urgent, nearby first</span>
+                </button>
+                <button class="iwih-tap" onClick="{{ setLater }}" style="flex:1;text-align:left;padding:14px;border:2px solid {{ laterBorder }};background:{{ laterBg }};color:{{ laterFg }};cursor:pointer">
+                  <span style="display:flex;align-items:center;gap:6px;font:800 15px var(--font-heading)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Want Later</span>
+                  <span style="display:block;font-size:11px;opacity:.85;margin-top:4px">Active 3 days · no rush</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <h6 style="margin:0 0 8px">Where & how far</h6>
+              <div class="grayscale" style="height:120px;background:radial-gradient(circle at 50% 50%, var(--color-neutral-300), var(--color-neutral-400));position:relative;display:grid;place-items:center;border:1px solid var(--color-divider)">
+                <span style="position:absolute;width:{{ radiusPx }};height:{{ radiusPx }};border:2px solid var(--color-accent);border-radius:50%;background:color-mix(in srgb,var(--color-accent) 12%,transparent)"></span>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--color-accent)" stroke="var(--color-bg)" stroke-width="1.5" style="position:relative;z-index:1"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6" fill="var(--color-bg)"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+                <span class="text-muted" style="font-size:12px">Search radius</span>
+                <span style="font:800 15px var(--font-heading);color:var(--color-accent)">{{ radiusLabel }}</span>
+              </div>
+              <input type="range" min="1" max="10" value="{{ radius }}" onChange="{{ onRadius }}" onInput="{{ onRadius }}" style="width:100%;accent-color:var(--color-accent);margin-top:4px">
+            </div>
+
+            <div style="display:flex;gap:14px;align-items:flex-end">
+              <div style="flex:1"><h6 style="margin:0 0 8px">Quantity</h6>
+                <div style="display:flex;align-items:center;border:1px solid var(--color-divider)">
+                  <button class="btn iwih-tap" onClick="{{ qtyDec }}" style="flex:none;font-size:20px;padding:8px 14px">−</button>
+                  <span style="flex:1;text-align:center;font:800 16px var(--font-heading)">{{ qty }}</span>
+                  <button class="btn iwih-tap" onClick="{{ qtyInc }}" style="flex:none;font-size:20px;padding:8px 14px">+</button>
+                </div>
+              </div>
+              <div class="field" style="flex:1;margin:0"><label>Max price (optional)</label><input class="input" placeholder="₱" value="{{ price }}" onChange="{{ onPrice }}"></div>
+            </div>
+
+            <div><h6 style="margin:0 0 8px">Fulfilment</h6>
+              <div style="display:flex;gap:8px">
+                <button class="iwih-tap" onClick="{{ setPickup }}" style="flex:1;padding:10px;font:800 13px var(--font-heading);border:2px solid {{ pickupBorder }};background:{{ pickupBg }};color:{{ pickupFg }};cursor:pointer">Pickup</button>
+                <button class="iwih-tap" onClick="{{ setDelivery }}" style="flex:1;padding:10px;font:800 13px var(--font-heading);border:2px solid {{ deliveryBorder }};background:{{ deliveryBg }};color:{{ deliveryFg }};cursor:pointer">Delivery</button>
+                <button class="iwih-tap" onClick="{{ setBoth }}" style="flex:1;padding:10px;font:800 13px var(--font-heading);border:2px solid {{ bothBorder }};background:{{ bothBg }};color:{{ bothFg }};cursor:pointer">Both</button>
+              </div>
+            </div>
+
+            <div class="field" style="margin:0"><label>Notes (optional)</label><textarea class="input" placeholder="e.g. must be sealed / original" onChange="{{ onNotes }}" style="min-height:60px">{{ notes }}</textarea></div>
+
+            <button class="btn btn-primary btn-block iwih-tap" onClick="{{ submitRequest }}" style="justify-content:space-between;padding:15px 16px;font-size:16px">Post my request <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+          </div>
+        </sc-if>
+
+        <!-- ============ WANT: ACTIVE / MATCHES ============ -->
+        <sc-if value="{{ is_want_active }}">
+          <div style="padding:16px 18px 24px;display:flex;flex-direction:column;gap:14px;animation:iwih-up .25s">
+            <div style="background:var(--color-accent);color:var(--color-bg);padding:16px 16px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font:800 12px var(--font-heading);letter-spacing:.1em">● REQUEST ACTIVE</span>
+                <span style="display:flex;align-items:center;gap:5px;font-size:13px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>22h 04m left</span>
+              </div>
+              <div style="font:800 20px var(--font-heading);margin-top:6px">Anker PowerCore 20000mAh</div>
+              <div style="font-size:12px;opacity:.9">Want Now · within {{ radiusLabel }} · qty {{ qty }}</div>
+              <div style="display:flex;gap:8px;margin-top:12px">
+                <button class="btn iwih-tap" style="background:var(--color-bg);color:var(--color-accent);flex:1;justify-content:center;font-size:12px;padding:8px">Pause</button>
+                <button class="btn iwih-tap" style="background:transparent;color:var(--color-bg);border:1px solid var(--color-bg);flex:1;justify-content:center;font-size:12px;padding:8px">Edit</button>
+                <button class="btn iwih-tap" style="background:transparent;color:var(--color-bg);border:1px solid var(--color-bg);flex:1;justify-content:center;font-size:12px;padding:8px">Cancel</button>
+              </div>
+            </div>
+
+            <sc-if value="{{ matching }}">
+              <div style="text-align:center;padding:20px 10px;display:flex;flex-direction:column;align-items:center;gap:12px">
+                <span style="width:38px;height:38px;border:3px solid var(--color-divider);border-top-color:var(--color-accent);border-radius:50%;animation:iwih-spin .9s linear infinite"></span>
+                <div><div style="font:800 15px var(--font-heading)">Searching nearby…</div><p class="text-muted" style="font-size:12px;margin:2px 0 0">Notifying providers within {{ radiusLabel }}</p></div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ matchesReady }}">
+              <div style="animation:iwih-up .3s">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px">
+                  <h6 style="margin:0">3 providers responded</h6>
+                  <span class="text-muted" style="font-size:11px">sorted by match</span>
+                </div>
+                <sc-for list="{{ matches }}" as="m" hint-placeholder-count="3">
+                  <div class="card iwih-tap elev-sm" onClick="{{ m.open }}" style="background:var(--color-surface);margin-top:10px;gap:8px">
+                    <div style="display:flex;gap:12px">
+                      <div class="grayscale" style="width:60px;height:60px;flex:none;background:repeating-linear-gradient(45deg,var(--color-neutral-300),var(--color-neutral-300) 7px,var(--color-neutral-200) 7px,var(--color-neutral-200) 14px);display:grid;place-items:center;color:var(--color-neutral-600)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+                      <div style="flex:1;min-width:0">
+                        <div style="display:flex;justify-content:space-between;gap:8px"><span style="font:800 15px var(--font-heading);line-height:1.15">{{ m.name }}</span><span style="font:800 15px var(--font-heading);color:var(--color-accent);white-space:nowrap">₱{{ m.price }}</span></div>
+                        <div class="text-muted" style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ m.item }}</div>
+                        <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+                          <span class="tag tag-neutral" style="gap:3px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/></svg>{{ m.dist }}</span>
+                          <span class="tag {{ m.availClass }}">{{ m.avail }}</span>
+                          <span class="tag tag-accent">{{ m.conf }}% match</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--color-divider);padding-top:8px">
+                      <span class="text-muted" style="font-size:11px">{{ m.mode }} · replies {{ m.resp }}</span>
+                      <span style="font:800 12px var(--font-heading);color:var(--color-accent);display:flex;align-items:center;gap:3px">Contact <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <!-- ============ MATCH DETAIL ============ -->
+        <sc-if value="{{ is_match_detail }}">
+          <div style="animation:iwih-up .25s">
+            <div class="grayscale" style="height:200px;background:repeating-linear-gradient(45deg,var(--color-neutral-300),var(--color-neutral-300) 12px,var(--color-neutral-200) 12px,var(--color-neutral-200) 24px);display:grid;place-items:center;color:var(--color-neutral-600)"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+            <div style="padding:16px 18px 24px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div><h3 style="margin:0 0 2px">Anker PowerCore</h3><div class="text-muted" style="font-size:13px">20000mAh · 20W USB-C PD · Black</div></div>
+                <span style="font:800 24px var(--font-heading);color:var(--color-accent)">₱1,290</span>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <span class="tag tag-accent">95% match</span><span class="tag tag-neutral">In stock · 6 left</span><span class="tag tag-outline">Pickup · Delivery</span>
+              </div>
+              <div class="hr" style="margin:4px 0"></div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:46px;height:46px;flex:none;background:var(--color-text);color:var(--color-bg);display:grid;place-items:center;font:800 17px var(--font-heading)">SM</div>
+                <div style="flex:1"><div style="font:800 15px var(--font-heading)">Sunrise Mobile Shop</div><div class="text-muted" style="font-size:12px">★ 4.8 · 0.8 km · replies in ~5 min</div></div>
+                <span class="tag tag-neutral" style="gap:3px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>Verified</span>
+              </div>
+              <div style="background:var(--color-surface);padding:12px;font-size:12px;display:flex;gap:8px;align-items:flex-start" class="text-muted">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;margin-top:1px"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Exact address & phone are shared only after you both agree in chat.
+              </div>
+              <button class="btn btn-primary btn-block iwih-tap" onClick="{{ goChat }}" style="justify-content:center;padding:15px;font-size:16px;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/></svg>Message provider</button>
+              <button class="btn btn-secondary iwih-tap" style="justify-content:center;padding:12px">Save for later</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ============ CHAT ============ -->
+        <sc-if value="{{ is_chat }}">
+          <div style="display:flex;flex-direction:column;height:100%">
+            <div style="flex:1;overflow-y:auto;padding:16px 16px;display:flex;flex-direction:column;gap:10px" class="iwih-scroll">
+              <div style="text-align:center;font-size:11px;color:var(--color-neutral-600);margin-bottom:4px">Matched on “Anker PowerCore 20000mAh” · 0.8 km</div>
+              <sc-for list="{{ chat }}" as="c" hint-placeholder-count="3">
+                <div style="display:flex;justify-content:{{ c.justify }}">
+                  <div style="max-width:78%;padding:9px 12px;font-size:13px;line-height:1.4;background:{{ c.bg }};color:{{ c.fg }}">{{ c.text }}<div style="font-size:9px;opacity:.6;margin-top:3px;text-align:right">{{ c.time }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="flex:none;padding:10px 12px;border-top:2px solid var(--color-divider);display:flex;gap:8px;background:var(--color-bg)">
+              <input class="input" placeholder="Message…" value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onDraftKey }}" style="flex:1">
+              <button class="btn btn-primary btn-icon iwih-tap" aria-label="Send" onClick="{{ send }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ============ HAVE: METHOD ============ -->
+        <sc-if value="{{ is_have_method }}">
+          <div style="padding:20px 18px 26px;display:flex;flex-direction:column;gap:14px;animation:iwih-up .25s">
+            <span class="tag tag-neutral" style="align-self:flex-start;background:var(--color-text);color:var(--color-bg)">PROVIDER · LIST FAST</span>
+            <h3 style="margin:0">What are you listing?</h3>
+            <p class="text-muted" style="font-size:13px;margin:0 0 2px">No storefront needed. List one item or a whole shelf.</p>
+            <button class="iwih-tap" onClick="{{ goHaveCapture }}" style="border:2px solid var(--color-text);background:var(--color-text);color:var(--color-bg);text-align:left;padding:18px;display:flex;gap:14px;align-items:center">
+              <span style="width:44px;height:44px;flex:none;border:2px solid var(--color-bg);display:grid;place-items:center"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h4l1-2h8l1 2h4v11H3z"/><path d="M7 13h4M7 16h7"/></svg></span>
+              <span style="flex:1"><span style="display:block;font:800 16px var(--font-heading)">Scan a shelf</span><span style="font-size:12px;opacity:.85">Detects many products at once</span></span>
+              <span class="tag tag-outline" style="border-color:var(--color-bg);color:var(--color-bg)">Multi</span>
+            </button>
+            <button class="iwih-tap" onClick="{{ goHaveCapture }}" style="border:1px solid var(--color-divider);background:var(--color-surface);text-align:left;padding:18px;display:flex;gap:14px;align-items:center">
+              <span style="width:44px;height:44px;flex:none;border:2px solid var(--color-text);display:grid;place-items:center"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+              <span style="flex:1"><span style="display:block;font:800 16px var(--font-heading)">One product</span><span class="text-muted" style="font-size:12px">Photo of a single item</span></span>
+            </button>
+            <button class="iwih-tap" onClick="{{ goHaveCapture }}" style="border:1px solid var(--color-divider);background:var(--color-surface);text-align:left;padding:18px;display:flex;gap:14px;align-items:center">
+              <span style="width:44px;height:44px;flex:none;border:2px solid var(--color-text);display:grid;place-items:center"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3h16v18H4z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></span>
+              <span style="flex:1"><span style="display:block;font:800 16px var(--font-heading)">Scan a menu</span><span class="text-muted" style="font-size:12px">For restaurants & food stalls</span></span>
+            </button>
+          </div>
+        </sc-if>
+
+        <!-- ============ HAVE: CAPTURE ============ -->
+        <sc-if value="{{ is_have_capture }}">
+          <div style="display:flex;flex-direction:column;height:100%;background:#0b0b0b;color:#fff">
+            <div style="flex:1;position:relative;display:grid;place-items:center;background:repeating-linear-gradient(135deg,#171717,#171717 22px,#1d1d1d 22px,#1d1d1d 44px)">
+              <div style="position:absolute;inset:30px;border:2px solid rgba(255,255,255,.35);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr">
+                <span style="border-right:1px dashed rgba(255,255,255,.25);border-bottom:1px dashed rgba(255,255,255,.25)"></span><span style="border-bottom:1px dashed rgba(255,255,255,.25)"></span><span style="border-right:1px dashed rgba(255,255,255,.25)"></span><span></span>
+              </div>
+              <div style="position:absolute;top:20px;left:0;right:0;text-align:center;font-size:12px;opacity:.7">Frame the whole shelf · we detect each item</div>
+            </div>
+            <div style="flex:none;padding:22px 20px 26px;display:flex;align-items:center;justify-content:space-between;background:#0b0b0b">
+              <button class="iwih-tap" onClick="{{ goHaveAnalyze }}" style="border:none;background:transparent;color:#fff;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>Upload</button>
+              <button class="iwih-tap" aria-label="Capture" onClick="{{ goHaveAnalyze }}" style="width:72px;height:72px;border-radius:50%;border:4px solid #fff;background:#fff;cursor:pointer"></button>
+              <div style="width:44px;font-size:11px;opacity:.55;text-align:center">Tap to simulate</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ============ HAVE: ANALYZING ============ -->
+        <sc-if value="{{ is_have_analyzing }}">
+          <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:40px 30px;text-align:center">
+            <div style="position:relative;width:120px;height:120px;display:grid;place-items:center">
+              <span style="position:absolute;inset:0;border:2px solid var(--color-text);border-radius:50%;animation:iwih-ring 1.8s ease-out infinite"></span>
+              <span style="width:56px;height:56px;border:3px solid var(--color-divider);border-top-color:var(--color-text);border-radius:50%;animation:iwih-spin .9s linear infinite"></span>
+            </div>
+            <div><h4 style="margin:0 0 6px">Detecting products…</h4><p class="text-muted" style="font-size:13px;margin:0">Found 4 items so far</p></div>
+          </div>
+        </sc-if>
+
+        <!-- ============ HAVE: REVIEW (multi) ============ -->
+        <sc-if value="{{ is_have_review }}">
+          <div style="padding:16px 18px 24px;display:flex;flex-direction:column;gap:12px;animation:iwih-up .25s">
+            <div style="background:var(--color-text);color:var(--color-bg);padding:10px 12px;display:flex;gap:8px;align-items:center;font-size:12px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex:none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              4 products detected. Add prices, then publish.
+            </div>
+            <sc-for list="{{ items }}" as="it" hint-placeholder-count="4">
+              <div class="card" style="background:{{ it.cardBg }};gap:10px;border:1px solid var(--color-divider)">
+                <div style="display:flex;gap:10px;align-items:flex-start">
+                  <div class="grayscale" style="width:48px;height:48px;flex:none;background:repeating-linear-gradient(45deg,var(--color-neutral-300),var(--color-neutral-300) 6px,var(--color-neutral-200) 6px,var(--color-neutral-200) 12px)"></div>
+                  <div style="flex:1;min-width:0">
+                    <input class="input" value="{{ it.name }}" onChange="{{ it.onName }}" style="font:800 14px var(--font-heading);background:transparent;border:none;padding:0;min-height:0">
+                    <div style="display:flex;align-items:center;gap:6px;margin-top:2px"><span class="text-muted" style="font-size:11px">{{ it.brand }}</span><span class="tag {{ it.confClass }}" style="padding:1px 6px;font-size:9px">{{ it.confLabel }}</span></div>
+                  </div>
+                  <button class="btn btn-icon iwih-tap" aria-label="Remove" onClick="{{ it.remove }}" style="flex:none;color:var(--color-neutral-600)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+                </div>
+                <div style="display:flex;gap:8px;align-items:flex-end">
+                  <div class="field" style="flex:1;margin:0"><label>Price ₱</label><input class="input" value="{{ it.price }}" onChange="{{ it.onPrice }}" placeholder="—"></div>
+                  <div class="field" style="flex:1;margin:0"><label>Qty</label><input class="input" value="{{ it.qty }}" onChange="{{ it.onQty }}"></div>
+                  <button class="iwih-tap" onClick="{{ it.toggle }}" style="flex:none;padding:8px 12px;font:800 12px var(--font-heading);cursor:pointer;border:2px solid {{ it.availBorder }};background:{{ it.availBg }};color:{{ it.availFg }}">{{ it.availLabel }}</button>
+                </div>
+              </div>
+            </sc-for>
+            <button class="btn btn-secondary iwih-tap" style="justify-content:center;padding:11px;font-size:13px">+ Add item manually</button>
+            <button class="btn iwih-tap" onClick="{{ publish }}" style="background:var(--color-text);color:var(--color-bg);justify-content:space-between;padding:15px 16px;font-size:16px;margin-top:4px">Publish {{ publishCount }} items <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+          </div>
+        </sc-if>
+
+        <!-- ============ HAVE: PUBLISHED / DASHBOARD ============ -->
+        <sc-if value="{{ is_provider_dash }}">
+          <div style="padding:16px 18px 24px;display:flex;flex-direction:column;gap:14px;animation:iwih-up .25s">
+            <div style="background:var(--color-text);color:var(--color-bg);padding:16px">
+              <div style="display:flex;align-items:center;gap:8px;font:800 13px var(--font-heading)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Published & live</div>
+              <div style="font-size:12px;opacity:.85;margin-top:2px">{{ publishCount }} items visible to buyers within 5 km</div>
+            </div>
+
+            <div style="background:var(--color-accent-100);border:1px solid var(--color-accent-300);padding:14px;animation:iwih-up .3s">
+              <div style="display:flex;justify-content:space-between;align-items:center"><span class="tag tag-accent">● NEW BUYER REQUEST</span><span class="text-muted" style="font-size:11px">1.2 km · now</span></div>
+              <div style="font:800 16px var(--font-heading);margin-top:8px">Someone wants a Power bank 20000mAh</div>
+              <div class="text-muted" style="font-size:12px">Want Now · qty 1 · matches your Anker listing (95%)</div>
+              <div style="display:flex;gap:8px;margin-top:12px">
+                <button class="btn iwih-tap" onClick="{{ goChat }}" style="background:var(--color-accent);color:var(--color-bg);flex:1;justify-content:center;padding:11px">Respond</button>
+                <button class="btn btn-secondary iwih-tap" style="flex:none;justify-content:center;padding:11px">Dismiss</button>
+              </div>
+            </div>
+
+            <div class="hr" style="margin:2px 0"></div>
+            <h6 style="margin:0">Your listings</h6>
+            <sc-for list="{{ liveItems }}" as="it" hint-placeholder-count="3">
+              <div class="card" style="background:var(--color-surface);flex-direction:row;align-items:center;gap:12px;padding:12px">
+                <div class="grayscale" style="width:42px;height:42px;flex:none;background:repeating-linear-gradient(45deg,var(--color-neutral-300),var(--color-neutral-300) 6px,var(--color-neutral-200) 6px,var(--color-neutral-200) 12px)"></div>
+                <div style="flex:1;min-width:0"><div style="font:800 14px var(--font-heading);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ it.name }}</div><div class="text-muted" style="font-size:12px">₱{{ it.price }} · {{ it.qty }} in stock</div></div>
+                <span class="tag {{ it.availClass }}">{{ it.availLabel }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <!-- ============ MATCHES TAB ============ -->
+        <sc-if value="{{ is_matches }}">
+          <div style="padding:16px 18px 24px;display:flex;flex-direction:column;gap:12px;animation:iwih-up .25s">
+            <div style="display:flex;gap:8px">
+              <span class="tag tag-accent" style="padding:6px 12px">WANT (3)</span><span class="tag tag-neutral" style="padding:6px 12px">HAVE (1)</span>
+            </div>
+            <sc-for list="{{ matches }}" as="m" hint-placeholder-count="3">
+              <div class="card iwih-tap elev-sm" onClick="{{ m.open }}" style="background:var(--color-surface);flex-direction:row;align-items:center;gap:12px;padding:12px">
+                <div class="grayscale" style="width:50px;height:50px;flex:none;background:repeating-linear-gradient(45deg,var(--color-neutral-300),var(--color-neutral-300) 6px,var(--color-neutral-200) 6px,var(--color-neutral-200) 12px)"></div>
+                <div style="flex:1;min-width:0"><div style="font:800 14px var(--font-heading)">{{ m.name }}</div><div class="text-muted" style="font-size:12px">{{ m.dist }} · ₱{{ m.price }} · {{ m.conf }}% match</div></div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <!-- ============ MESSAGES TAB ============ -->
+        <sc-if value="{{ is_messages }}">
+          <div style="padding:8px 0 24px;animation:iwih-up .25s">
+            <div class="iwih-tap" onClick="{{ goChat }}" style="display:flex;gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--color-divider);cursor:pointer">
+              <div style="width:46px;height:46px;flex:none;background:var(--color-text);color:var(--color-bg);display:grid;place-items:center;font:800 15px var(--font-heading)">SM</div>
+              <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span style="font:800 14px var(--font-heading)">Sunrise Mobile Shop</span><span class="text-muted" style="font-size:11px">2:16 PM</span></div><div class="text-muted" style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Yes, anytime before 8pm. We're on the 2nd floor…</div></div>
+              <span style="width:9px;height:9px;background:var(--color-accent);border-radius:50%;flex:none"></span>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--color-divider);opacity:.7">
+              <div style="width:46px;height:46px;flex:none;background:var(--color-neutral-400);color:var(--color-bg);display:grid;place-items:center;font:800 15px var(--font-heading)">TH</div>
+              <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span style="font:800 14px var(--font-heading)">TechHub BGC</span><span class="text-muted" style="font-size:11px">Yest.</span></div><div class="text-muted" style="font-size:12px">You: Is the price negotiable?</div></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ============ ACTIVITY TAB ============ -->
+        <sc-if value="{{ is_activity }}">
+          <div style="padding:16px 18px 24px;display:flex;flex-direction:column;gap:12px;animation:iwih-up .25s">
+            <h6 style="margin:0">As a buyer</h6>
+            <div class="card iwih-tap" onClick="{{ goActive }}" style="background:var(--color-surface);gap:6px">
+              <div style="display:flex;justify-content:space-between"><span class="tag tag-accent">WANT · ACTIVE</span><span class="text-muted" style="font-size:11px">22h left</span></div>
+              <div class="card-title" style="font-size:15px">Anker PowerCore 20000mAh</div>
+              <div class="card-meta">3 responses</div>
+            </div>
+            <div class="card" style="background:var(--color-surface);gap:6px;opacity:.75">
+              <div style="display:flex;justify-content:space-between"><span class="tag tag-neutral">WANT · EXPIRED</span><span class="text-muted" style="font-size:11px">2 days ago</span></div>
+              <div class="card-title" style="font-size:15px">USB-C fast charger 45W</div>
+              <div style="display:flex;gap:8px;margin-top:4px"><button class="btn btn-ghost iwih-tap" style="padding:2px 4px;font-size:12px">Reactivate</button></div>
+            </div>
+            <h6 style="margin:8px 0 0">As a provider</h6>
+            <div class="card iwih-tap" onClick="{{ goDash }}" style="background:var(--color-surface);flex-direction:row;align-items:center;gap:12px;padding:12px">
+              <div style="width:42px;height:42px;flex:none;background:var(--color-text);color:var(--color-bg);display:grid;place-items:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h4l1-2h8l1 2h4v11H3z"/></svg></div>
+              <div style="flex:1"><div style="font:800 14px var(--font-heading)">4 items published</div><div class="text-muted" style="font-size:12px">1 new buyer request</div></div>
+              <span class="tag tag-accent">1</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ============ PROFILE TAB ============ -->
+        <sc-if value="{{ is_profile }}">
+          <div style="padding:20px 18px 24px;display:flex;flex-direction:column;gap:16px;animation:iwih-up .25s">
+            <div style="display:flex;gap:14px;align-items:center">
+              <div style="width:64px;height:64px;flex:none;background:var(--color-accent);color:var(--color-bg);display:grid;place-items:center;font:800 24px var(--font-heading)">JR</div>
+              <div><div style="font:800 19px var(--font-heading)">Jamie Reyes</div><div class="text-muted" style="font-size:13px">BGC, Taguig · Verified ✓</div></div>
+            </div>
+            <div style="display:flex;gap:10px">
+              <div style="flex:1;background:var(--color-surface);padding:12px;text-align:center"><div style="font:800 22px var(--font-heading);color:var(--color-accent)">12</div><div class="text-muted" style="font-size:11px">Requests</div></div>
+              <div style="flex:1;background:var(--color-surface);padding:12px;text-align:center"><div style="font:800 22px var(--font-heading)">4</div><div class="text-muted" style="font-size:11px">Listings</div></div>
+              <div style="flex:1;background:var(--color-surface);padding:12px;text-align:center"><div style="font:800 22px var(--font-heading)">4.9</div><div class="text-muted" style="font-size:11px">Rating</div></div>
+            </div>
+            <div class="hr" style="margin:2px 0"></div>
+            <div style="display:flex;flex-direction:column">
+              <div class="iwih-tap" style="display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--color-divider)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h4l1-2h8l1 2h4v11H3z"/></svg>Business profile <span style="margin-left:auto" class="text-muted">Set up ›</span></div>
+              <div class="iwih-tap" style="display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--color-divider)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg>Location & radius <span style="margin-left:auto" class="text-muted">5 km ›</span></div>
+              <div class="iwih-tap" style="display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--color-divider)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/></svg>Notifications <span style="margin-left:auto" class="text-muted">On ›</span></div>
+              <div class="iwih-tap" style="display:flex;align-items:center;gap:12px;padding:13px 4px"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>Settings <span style="margin-left:auto" class="text-muted">›</span></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ============ NOTIFICATIONS ============ -->
+        <sc-if value="{{ is_notifications }}">
+          <div style="padding:8px 0 24px;animation:iwih-up .25s">
+            <div class="iwih-tap" onClick="{{ goActive }}" style="display:flex;gap:12px;padding:14px 18px;border-bottom:1px solid var(--color-divider);background:var(--color-accent-100)">
+              <span style="width:36px;height:36px;flex:none;background:var(--color-accent);color:var(--color-bg);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <div><div style="font:800 13px var(--font-heading)">3 providers matched your request</div><div class="text-muted" style="font-size:12px">Anker PowerCore · nearest 0.8 km · now</div></div>
+            </div>
+            <div style="display:flex;gap:12px;padding:14px 18px;border-bottom:1px solid var(--color-divider)">
+              <span style="width:36px;height:36px;flex:none;border:2px solid var(--color-text);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/></svg></span>
+              <div><div style="font:800 13px var(--font-heading)">Sunrise Mobile Shop replied</div><div class="text-muted" style="font-size:12px">“Yes, anytime before 8pm.” · 2:16 PM</div></div>
+            </div>
+            <div style="display:flex;gap:12px;padding:14px 18px;border-bottom:1px solid var(--color-divider)">
+              <span style="width:36px;height:36px;flex:none;border:2px solid var(--color-accent);color:var(--color-accent);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <div><div style="font:800 13px var(--font-heading)">Request expiring soon</div><div class="text-muted" style="font-size:12px">“USB-C charger 45W” expires in 2h · Reactivate?</div></div>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+
+      <sc-if value="{{ showNav }}">
+        <div style="flex:none;display:flex;border-top:2px solid var(--color-divider);background:var(--color-bg)">
+          <button class="iwih-tap" onClick="{{ goHome }}" style="flex:1;background:none;border:none;padding:9px 0 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:{{ navHome }}">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+            <span style="font-size:10px;font-weight:600">Home</span>
+          </button>
+          <button class="iwih-tap" onClick="{{ goMatches }}" style="flex:1;background:none;border:none;padding:9px 0 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:{{ navMatches }}">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <span style="font-size:10px;font-weight:600">Matches</span>
+          </button>
+          <button class="iwih-tap" onClick="{{ goMessages }}" style="flex:1;background:none;border:none;padding:9px 0 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:{{ navMessages }};position:relative">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/></svg>
+            <span style="font-size:10px;font-weight:600">Messages</span>
+            <span style="position:absolute;top:7px;right:26px;width:7px;height:7px;background:var(--color-accent);border-radius:50%"></span>
+          </button>
+          <button class="iwih-tap" onClick="{{ goActivity }}" style="flex:1;background:none;border:none;padding:9px 0 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:{{ navActivity }}">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <span style="font-size:10px;font-weight:600">Activity</span>
+          </button>
+          <button class="iwih-tap" onClick="{{ goProfile }}" style="flex:1;background:none;border:none;padding:9px 0 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:{{ navProfile }}">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            <span style="font-size:10px;font-weight:600">Profile</span>
+          </button>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- ============ SIDE PANEL: brief, UX review, handoff ============ -->
+  <div style="flex:1;min-width:320px;max-width:460px;display:flex;flex-direction:column;gap:16px;padding-top:6px">
+    <div>
+      <div class="tag tag-accent" style="margin-bottom:10px">MVP PROTOTYPE · MOBILE</div>
+      <h2 style="margin:0 0 6px">I Want, I Have.</h2>
+      <p class="text-muted" style="font-size:14px;margin:0">A location-based demand↔availability matcher. Tap through both journeys in the phone — everything is live: forms, simulated AI, matching, chat.</p>
+    </div>
+
+    <div class="card" style="background:var(--color-bg);border:2px solid var(--color-divider);gap:10px">
+      <h6 style="margin:0">Try the two journeys</h6>
+      <button class="btn btn-primary iwih-tap" onClick="{{ demoBuyer }}" style="justify-content:space-between">1 · Buyer: Want → match → chat <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <button class="btn iwih-tap" onClick="{{ demoProvider }}" style="background:var(--color-text);color:var(--color-bg);justify-content:space-between">2 · Provider: shelf scan → publish <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <button class="btn btn-secondary iwih-tap" onClick="{{ goHome }}" style="justify-content:flex-start">↺ Reset to Home</button>
+    </div>
+
+    <div class="card" style="background:var(--color-surface);gap:8px">
+      <h6 style="margin:0;color:var(--color-accent)">UX review — what I changed for the MVP</h6>
+      <ul style="margin:0;padding-left:18px;font-size:12.5px;line-height:1.55;color:var(--color-text)">
+        <li><b>Cut the separate onboarding + login + permission screens</b> down to one welcome + inline location prompt. First-run friction was the biggest risk for a "fast" app.</li>
+        <li><b>Merged "type / photo / link" into one entry step</b> that always lands on the same editable review — fewer branches to learn.</li>
+        <li><b>One Activity tab</b> instead of separate buyer/seller histories; role is a section, not a mode switch.</li>
+        <li><b>Privacy by default:</b> no phone numbers or exact addresses shown — contact happens in-app; address is revealed only by mutual agreement.</li>
+        <li><b>Trust signals</b> on every match: verified badge, rating, response time, match-confidence %.</li>
+        <li><b>Two coordinated identities</b> — <span style="color:var(--color-accent);font-weight:700">Want = red</span>, <span style="font-weight:700">Have = ink</span> — reinforced by icon, label and layout, never colour alone.</li>
+      </ul>
+    </div>
+
+    <div class="card" style="background:var(--color-surface);gap:8px">
+      <h6 style="margin:0">Deferred to v2 (out of MVP)</h6>
+      <p class="text-muted" style="font-size:12.5px;margin:0">Link-paste parsing (Shopee/Lazada scraping), full business storefronts, duplicate-listing detection, menu OCR nuance, in-app payments, separate seller analytics, notification-permission wall. Stubbed in UI where useful, not built.</p>
+    </div>
+
+    <div class="card" style="background:var(--color-surface);gap:8px">
+      <h6 style="margin:0">Engineering handoff notes</h6>
+      <ul style="margin:0;padding-left:18px;font-size:12.5px;line-height:1.5;color:var(--color-text)">
+        <li>Matching = server job keyed on category+brand+model+geo radius; confidence is a rankable score, surfaced as %.</li>
+        <li>AI extraction is async: optimistic "analyzing" state, then editable fields with per-field confidence; low-confidence fields (&lt;85%) pre-flagged for review.</li>
+        <li>Requests carry a TTL (24h / 72h) + expiry push; renew re-stamps TTL.</li>
+        <li>Chat brokers contact; PII (phone, exact address) gated behind mutual reveal.</li>
+        <li>All type ≥12px, touch targets ≥44px, colour never sole signal (a11y).</li>
+      </ul>
+    </div>
+    <p class="text-muted" style="font-size:11px;margin:0">Desktop/tablet layouts, remaining edge-state screens (blurry photo, invalid link, sold-out, connection lost) and the full component sheet are the natural next pass — say the word.</p>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.scrollRef = React.createRef();
+  }
+  state = {
+    screen:'welcome', urgency:'now', radius:3, qty:1, fulfil:'both',
+    matching:false,
+    product:{ name:'Anker PowerCore 20000mAh', category:'Electronics', brand:'Anker', model:'A1287', color:'Black', specs:'20,000mAh · 20W USB-C Power Delivery' },
+    price:'', notes:'',
+    items:[
+      {name:'Coca-Cola Zero 1.5L', brand:'Coca-Cola', price:'65', qty:'24', available:true, conf:0.97},
+      {name:'Nature Spring Water 500ml', brand:'Nature Spring', price:'15', qty:'60', available:true, conf:0.95},
+      {name:"Lay's Classic 60g", brand:"Lay's", price:'35', qty:'18', available:true, conf:0.90},
+      {name:'Kopiko Brown Coffee 3-in-1', brand:'Kopiko', price:'8', qty:'40', available:false, conf:0.68},
+    ],
+    chat:[
+      {me:false, text:"Hi! Yes, we have the Anker PowerCore 20000mAh in stock — black. ₱1,290.", time:'2:14 PM'},
+      {me:true, text:"Great. Is pickup available today?", time:'2:15 PM'},
+      {me:false, text:"Yes, anytime before 8pm. We're on the 2nd floor, Sunrise Mall.", time:'2:16 PM'},
+    ],
+    draft:'',
+  };
+
+  MATCHES = [
+    {id:1, name:'Sunrise Mobile Shop', item:'Anker PowerCore 20000mAh', dist:'0.8 km', price:'1,290', avail:'In stock', conf:95, resp:'~5 min', mode:'Pickup · Delivery'},
+    {id:2, name:'TechHub BGC', item:'Anker PowerCore 20000mAh', dist:'1.4 km', price:'1,350', avail:'In stock', conf:88, resp:'~15 min', mode:'Pickup'},
+    {id:3, name:'QuickFix Gadgets', item:'Anker A1287 (20000mAh)', dist:'2.1 km', price:'1,199', avail:'Low stock', conf:82, resp:'~1 hr', mode:'Delivery'},
+  ];
+
+  componentDidUpdate(_, prev){
+    if(prev.screen !== this.state.screen && this.scrollRef.current) this.scrollRef.current.scrollTop = 0;
+  }
+
+  go = (s) => this.setState({screen:s});
+  setP = (k) => (e) => { const v = e.target.value; this.setState(s=>({product:{...s.product,[k]:v}})); };
+
+  goWantAnalyze = () => { this.setState({screen:'want_analyzing'}); setTimeout(()=>this.setState({screen:'want_review'}), 2300); };
+  goHaveAnalyze = () => { this.setState({screen:'have_analyzing'}); setTimeout(()=>this.setState({screen:'have_review'}), 2300); };
+  submitRequest = () => { this.setState({screen:'want_active', matching:true}); setTimeout(()=>this.setState({matching:false}), 2600); };
+  publish = () => this.setState({screen:'provider_dash'});
+
+  demoBuyer = () => this.setState({screen:'want_method'});
+  demoProvider = () => this.setState({screen:'have_method'});
+
+  setItem = (i,k) => (e) => { const v = e.target.value; this.setState(s=>{ const items=s.items.slice(); items[i]={...items[i],[k]:v}; return {items}; }); };
+  toggleItem = (i) => () => this.setState(s=>{ const items=s.items.slice(); items[i]={...items[i],available:!items[i].available}; return {items}; });
+  removeItem = (i) => () => this.setState(s=>({items:s.items.filter((_,idx)=>idx!==i)}));
+
+  send = () => { const d=(this.state.draft||'').trim(); if(!d) return; this.setState(s=>({chat:[...s.chat,{me:true,text:d,time:'now'}], draft:''})); };
+
+  renderVals(){
+    const st = this.state;
+    const is = (k)=> st.screen===k;
+    const ac='var(--color-accent)', ink='var(--color-text)', bg='var(--color-bg)', surf='var(--color-surface)', div='var(--color-divider)', muted='var(--color-neutral-600)';
+
+    const tabScreens = ['home','matches','messages','activity','profile','provider_dash','notifications'];
+    const headerMap = {
+      want_method:{t:'I Want', back:'home', tag:'WANT', tagClass:'tag-accent'},
+      want_capture:{t:'Add product', back:'want_method'},
+      want_analyzing:{t:'Analyzing', back:'want_method'},
+      want_review:{t:'Review details', back:'want_method', tag:'WANT', tagClass:'tag-accent'},
+      want_details:{t:'Request options', back:'want_review', tag:'WANT', tagClass:'tag-accent'},
+      want_active:{t:'Your request', back:'home'},
+      match_detail:{t:'Provider', back:'want_active'},
+      chat:{t:'Sunrise Mobile', back:'want_active'},
+      have_method:{t:'I Have', back:'home', tag:'HAVE', tagClass:'tag-neutral'},
+      have_capture:{t:'Scan items', back:'have_method'},
+      have_analyzing:{t:'Detecting', back:'have_method'},
+      have_review:{t:'Review items', back:'have_method', tag:'HAVE', tagClass:'tag-neutral'},
+      provider_dash:{t:'Your listings', back:'home'},
+      matches:{t:'Matches', back:null},
+      messages:{t:'Messages', back:null},
+      activity:{t:'Activity', back:null},
+      profile:{t:'Profile', back:null},
+      notifications:{t:'Notifications', back:'home'},
+    };
+    const h = headerMap[st.screen];
+    const showHeader = !!h && st.screen!=='want_capture' && st.screen!=='have_capture';
+    const showNav = tabScreens.includes(st.screen);
+
+    const navColor = (keys)=> keys.includes(st.screen)? ac : muted;
+
+    const radiusLabel = st.radius + ' km';
+    const radiusPx = Math.min(24 + st.radius*8, 108) + 'px';
+
+    const availClassFor = (a)=> a==='In stock' ? 'tag-neutral' : a==='Low stock' ? 'tag-outline' : 'tag-neutral';
+    const matches = this.MATCHES.map(m=>({ ...m, availClass: availClassFor(m.avail), open: ()=>this.go('match_detail') }));
+
+    const selBtn = (on)=>({ border: on?ink:div, bg: on?ink:surf, fg: on?bg:ink });
+    const acBtn = (on)=>({ border: on?ac:div, bg: on?'var(--color-accent-100)':surf, fg: on?'var(--color-accent-800)':ink });
+
+    const now = acBtn(st.urgency==='now'); const later = acBtn(st.urgency==='later');
+    const pk = selBtn(st.fulfil==='pickup'); const dl = selBtn(st.fulfil==='delivery'); const bo = selBtn(st.fulfil==='both');
+
+    const items = st.items.map((it,i)=>({
+      ...it,
+      confClass: it.conf>=0.85?'tag-neutral':'tag-outline',
+      confLabel: it.conf>=0.85? ('AI '+Math.round(it.conf*100)+'%') : ('CHECK '+Math.round(it.conf*100)+'%'),
+      cardBg: it.available? surf : 'var(--color-neutral-200)',
+      availLabel: it.available?'Available':'Sold out',
+      availBorder: it.available?ink:div, availBg: it.available?ink:'transparent', availFg: it.available?bg:muted,
+      onName: this.setItem(i,'name'), onPrice: this.setItem(i,'price'), onQty: this.setItem(i,'qty'),
+      toggle: this.toggleItem(i), remove: this.removeItem(i),
+    }));
+    const liveItems = st.items.map(it=>({ name:it.name, price:it.price, qty:it.qty, availLabel: it.available?'Live':'Hidden', availClass: it.available?'tag-neutral':'tag-outline' }));
+
+    const chat = st.chat.map(c=>({ text:c.text, time:c.time, justify: c.me?'flex-end':'flex-start', bg: c.me?ac:surf, fg: c.me?bg:ink }));
+
+    return {
+      scrollRef: this.scrollRef,
+      is_welcome:is('welcome'), is_home:is('home'),
+      is_want_method:is('want_method'), is_want_capture:is('want_capture'), is_want_analyzing:is('want_analyzing'),
+      is_want_review:is('want_review'), is_want_details:is('want_details'), is_want_active:is('want_active'),
+      is_match_detail:is('match_detail'), is_chat:is('chat'),
+      is_have_method:is('have_method'), is_have_capture:is('have_capture'), is_have_analyzing:is('have_analyzing'),
+      is_have_review:is('have_review'), is_provider_dash:is('provider_dash'),
+      is_matches:is('matches'), is_messages:is('messages'), is_activity:is('activity'), is_profile:is('profile'),
+      is_notifications:is('notifications'),
+
+      showHeader, title: h?h.t:'', backTo: h?h.back:null, headerTag: h&&h.tag?h.tag:'', headerTagClass: h&&h.tagClass?h.tagClass:'',
+      showNav,
+      navHome: navColor(['home']), navMatches: navColor(['matches']), navMessages: navColor(['messages','chat']),
+      navActivity: navColor(['activity','provider_dash']), navProfile: navColor(['profile']),
+
+      goBack: ()=> h&&h.back? this.go(h.back) : this.go('home'),
+      goHome:()=>this.go('home'), goWant:()=>this.go('want_method'), goHave:()=>this.go('have_method'),
+      goWantCapture:()=>this.go('want_capture'), goWantAnalyze:this.goWantAnalyze,
+      goWantDetails:()=>this.go('want_details'), submitRequest:this.submitRequest,
+      goActive:()=>this.go('want_active'), goChat:()=>this.go('chat'),
+      goHaveCapture:()=>this.go('have_capture'), goHaveAnalyze:this.goHaveAnalyze, publish:this.publish,
+      goDash:()=>this.go('provider_dash'),
+      goMatches:()=>this.go('matches'), goMessages:()=>this.go('messages'), goActivity:()=>this.go('activity'),
+      goProfile:()=>this.go('profile'), goNotifs:()=>this.go('notifications'),
+      demoBuyer:this.demoBuyer, demoProvider:this.demoProvider,
+
+      product: st.product,
+      onName:this.setP('name'), onBrand:this.setP('brand'), onModel:this.setP('model'),
+      onCategory:this.setP('category'), onColor:this.setP('color'), onSpecs:this.setP('specs'),
+
+      radius: st.radius, radiusLabel, radiusPx,
+      onRadius:(e)=>this.setState({radius:Number(e.target.value)}),
+      qty: st.qty, qtyInc:()=>this.setState(s=>({qty:s.qty+1})), qtyDec:()=>this.setState(s=>({qty:Math.max(1,s.qty-1)})),
+      price: st.price, onPrice:(e)=>this.setState({price:e.target.value}),
+      notes: st.notes, onNotes:(e)=>this.setState({notes:e.target.value}),
+
+      setNow:()=>this.setState({urgency:'now'}), setLater:()=>this.setState({urgency:'later'}),
+      nowBorder:now.border, nowBg:now.bg, nowFg:now.fg, laterBorder:later.border, laterBg:later.bg, laterFg:later.fg,
+      setPickup:()=>this.setState({fulfil:'pickup'}), setDelivery:()=>this.setState({fulfil:'delivery'}), setBoth:()=>this.setState({fulfil:'both'}),
+      pickupBorder:pk.border,pickupBg:pk.bg,pickupFg:pk.fg, deliveryBorder:dl.border,deliveryBg:dl.bg,deliveryFg:dl.fg, bothBorder:bo.border,bothBg:bo.bg,bothFg:bo.fg,
+
+      matching: st.matching, matchesReady: !st.matching, matches,
+      items, liveItems, publishCount: st.items.length,
+      chat, draft: st.draft, onDraft:(e)=>this.setState({draft:e.target.value}),
+      onDraftKey:(e)=>{ if(e.key==='Enter') this.send(); }, send:this.send,
+    };
+  }
+}
+</script>
+</body>
+</html>
